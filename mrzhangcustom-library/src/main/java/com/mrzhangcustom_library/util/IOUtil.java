@@ -126,7 +126,7 @@ public class IOUtil {
     //将InputStream写入File
     public static boolean toFile(InputStream is, File file){
         try{
-            //文件输出流1
+            //文件输出流
             FileOutputStream fos = new FileOutputStream(file);
             //写数据
             byte buf[] = new byte[1024];
