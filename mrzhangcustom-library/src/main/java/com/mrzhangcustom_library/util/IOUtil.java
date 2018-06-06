@@ -45,11 +45,12 @@ public class IOUtil {
                 return "";
             }
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            byte[] data = new byte[BUFFER_SIZE];
-            int count = -1;
-            while ((count = is.read(data, 0, BUFFER_SIZE)) != -1) {
-                os.write(data, 0, count);
+            int len = -1;
+            byte[] buf = new byte[BUFFER_SIZE];
+            while ((len = is.read(buf)) != -1) {
+                os.write(buf, 0, len);
             }
+            is.close();
             return new String(os.toByteArray(), "ISO-8859-1");
         }catch(IOException e){
             e.printStackTrace();
