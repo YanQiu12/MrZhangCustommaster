@@ -124,7 +124,7 @@ public class IOUtil {
         return null;
     }
     //将InputStream写入File
-    public static boolean InputStreamToFile(InputStream is, File file){
+    public static boolean toFile(InputStream is, File file){
         try{
             //文件输出流
             FileOutputStream fos = new FileOutputStream(file);
@@ -147,15 +147,15 @@ public class IOUtil {
         return false;
     }
     //将String写入File
-    public static boolean StringToFile(String str, File file){
+    public static boolean toFile(String str, File file){
         InputStream is = toInputStream(str);
-        boolean b = InputStreamToFile(is, file);
+        boolean b = toFile(is, file);
         return b;
     }
     //将String写入缓存
-    public static boolean StringToFile(String str,int fileType,Context context,String name){
+    public static boolean toFile(String str,int fileType,Context context,String name){
         File file = getFile(fileType, context, name);
-        boolean b = StringToFile(str, file);
+        boolean b = toFile(str, file);
         return b;
     }
 }

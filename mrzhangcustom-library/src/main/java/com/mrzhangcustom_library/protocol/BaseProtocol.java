@@ -107,7 +107,7 @@ public abstract class BaseProtocol<T> {
         if(json!=null){
             long currentTimeMillis = System.currentTimeMillis();
             long invalidTime = currentTimeMillis + 1 * 60 * 1000;//有效时间5分钟
-            IOUtil.StringToFile(invalidTime+json,IOUtil.FILES,context,index + ".json");
+            IOUtil.toFile(invalidTime+json,IOUtil.FILES,context,index + ".json");
         }
 //        FileWriter fileWriter = null;
 //        BufferedWriter bufferedWriter = null;
