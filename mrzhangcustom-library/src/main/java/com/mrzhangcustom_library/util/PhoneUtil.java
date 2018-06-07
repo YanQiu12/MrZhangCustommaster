@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.widget.Toast;
+
 import java.io.File;
 
 /**
@@ -28,6 +30,7 @@ public class PhoneUtil {
         if (smsContent ==  null|| phoneNumber.length() < 4) {
             return;
         }
+        Toast.makeText(activity, "", Toast.LENGTH_SHORT).show();
         Uri uri = Uri.parse("smsto:" + phoneNumber);
         Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
         intent.putExtra("sms_body", smsContent);
