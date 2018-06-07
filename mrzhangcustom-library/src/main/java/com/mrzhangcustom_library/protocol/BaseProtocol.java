@@ -2,21 +2,9 @@ package com.mrzhangcustom_library.protocol;
 
 import android.content.Context;
 import android.text.TextUtils;
-import com.mrzhangcustom_library.Constant;
 import com.mrzhangcustom_library.util.IOUtil;
 import com.mrzhangcustom_library.util.InternetUtil;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.concurrent.TimeUnit;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by 许佛 on 2017/12/23.
