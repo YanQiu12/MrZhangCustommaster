@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
  */
 
 public class InternetUtil {
+    private InternetUtil() {}
     /**
      * 判断手机是否有网络连接
      * @param context 上下文

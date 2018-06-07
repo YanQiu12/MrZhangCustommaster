@@ -12,6 +12,8 @@ import java.util.Map;
 
 public class JsonUtil {
 
+    private JsonUtil() {}
+
     public static Map<String, Object> jsonToMap(String jsonString) {
         Map<String, Object> map = new HashMap<String, Object>();
         try {

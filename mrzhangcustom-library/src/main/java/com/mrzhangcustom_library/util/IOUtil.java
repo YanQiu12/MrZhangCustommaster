@@ -25,6 +25,7 @@ public class IOUtil {
     public static final int CACHE = 1;
     private static final int BUFFER_SIZE = 1024;
 
+    private IOUtil() {}
     /**
      * @param filetype 获取File路径还是Cache路径
      * @param context 上下文
@@ -139,6 +140,7 @@ public class IOUtil {
                 fos.write(buf, 0, numread);
             } while (true);
             //关闭文件流
+            is.close();
             fos.close();
             return true;
         }catch(IOException e){

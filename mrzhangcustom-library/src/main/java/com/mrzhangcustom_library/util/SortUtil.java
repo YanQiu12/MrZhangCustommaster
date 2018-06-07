@@ -3,6 +3,8 @@ package com.mrzhangcustom_library.util;
 import java.util.Arrays;
 
 public class SortUtil {
+
+    private SortUtil() {}
     // TODO: 2018/6/6 冒泡排序
     public static int[] bubbleSort(int[] array) {
         if (array.length == 0)

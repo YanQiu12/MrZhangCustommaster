@@ -7,6 +7,8 @@ import java.text.DecimalFormat;
  * Created by 许佛 on 2018/6/7.
  */
 public class FileUtil {
+    private FileUtil() {}
+
     /**
      * 递归计算文件夹大小
      *

@@ -7,6 +7,7 @@ public class ProgressDialogUtil {
 
     private static ProgressDialog progressDlg = null;
 
+    private ProgressDialogUtil() {}
     /**
      * 启动进度条
      * @param ctx 当前的activity

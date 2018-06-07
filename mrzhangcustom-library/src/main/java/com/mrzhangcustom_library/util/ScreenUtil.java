@@ -7,7 +7,9 @@ import android.util.DisplayMetrics;
 /**
  * Created by 许佛 on 2018/6/7.
  */
-public class DensityUtil {
+public class ScreenUtil {
+
+    private ScreenUtil(){}
     /**
      * 将px值转换为 dip或dp值，保证尺寸大小不变
      *

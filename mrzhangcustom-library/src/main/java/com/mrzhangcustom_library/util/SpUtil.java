@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 public class SpUtil {
     private static final String SHARE_PREFS_NAME = "mythmayor";
 
+    private SpUtil() {}
+
     public static void putBoolean(Context ctx, String key, boolean value) {
         SharedPreferences pref = ctx.getSharedPreferences(SHARE_PREFS_NAME,
                 Context.MODE_PRIVATE);
