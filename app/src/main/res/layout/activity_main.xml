@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context="com.mrzhangcustom_master.MainActivity">
+    tools:context="com.mrzhangcustom_master.activity.MainActivity">
 
     <Button
         android:id="@+id/btn_data"
