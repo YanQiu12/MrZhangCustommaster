@@ -4,6 +4,9 @@ import android.content.Context;
 import android.text.TextUtils;
 import com.mrzhangcustom_library.util.IOUtil;
 import com.mrzhangcustom_library.util.InternetUtil;
+
+import org.json.JSONException;
+
 import java.io.File;
 
 /**
@@ -26,7 +29,12 @@ public abstract class BaseProtocol<T> {
         }else{
             result = getDataFromNet(url,index);//如果缓存数据过期，从网络获取数据赋值给result
         }
-        return parseJson(result);//解析result
+        try {
+            return parseJson(result);//解析result
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String getDataFromNet(String url,int index){
@@ -125,5 +133,5 @@ public abstract class BaseProtocol<T> {
     }
 
     //因为每个模块的json中内容不一样，所以无法编写具体的javabean进行解析，因此让子类实现
-    public abstract T parseJson(String json);
+    public abstract T parseJson(String json) throws JSONException;
 }

@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.widget.Toast;
-
 import java.io.File;
 
 /**
  * Created by 许佛 on 2018/6/7.
  */
 public class PhoneUtil {
-
     private static long lastClickTime;
 
     private PhoneUtil() {
