@@ -24,11 +24,12 @@ public abstract class BaseProtocol<T> {
         File file = IOUtil.getFile(IOUtil.FILES, context, index + ".json");
         String json = getDataFromLocal(file);
         String result;
-        if(!TextUtils.isEmpty(json)){
-            result = json;//json数据未过期，将其赋值给要解析的result
-        }else{
-            result = getDataFromNet(url,index);//如果缓存数据过期，从网络获取数据赋值给result
-        }
+        result = getDataFromNet(url,index);//只从网络获取
+//        if(!TextUtils.isEmpty(json)){
+//            result = json;//json数据未过期，将其赋值给要解析的result
+//        }else{
+//            result = getDataFromNet(url,index);//如果缓存数据过期，从网络获取数据赋值给result
+//        }
         try {
             return parseJson(result);//解析result
         } catch (JSONException e) {

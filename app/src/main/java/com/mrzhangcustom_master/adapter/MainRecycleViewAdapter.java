@@ -1,5 +1,6 @@
 package com.mrzhangcustom_master.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,13 +9,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.mrzhangcustom_master.R;
 import com.mrzhangcustom_master.bean.People;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleViewAdapter.RecyclerHolder> {
 
     Context mContext;
-    ArrayList<People> dataList;
+    ArrayList<People> adapterDataList;
 
     public MainRecycleViewAdapter(RecyclerView recyclerView) {
         this.mContext = recyclerView.getContext();
@@ -28,14 +31,14 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     @Override
     public void onBindViewHolder(RecyclerHolder holder, int position) {
-        holder.tvLeft.setText((dataList.get(position).getName()));
-        holder.tvRight.setText((dataList.get(position).getPhone()));
+        holder.tvLeft.setText((adapterDataList.get(position).getName()));
+        holder.tvRight.setText((adapterDataList.get(position).getPhone()));
     }
 
     @Override
     public int getItemCount() {
-        if(dataList!=null){
-            return dataList.size();
+        if(adapterDataList!=null){
+            return adapterDataList.size();
         }
         return 0;
     }
@@ -51,10 +54,13 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         }
     }
 
-    public void setDataList(List<People> dataList) {
-        if (null != dataList) {
-            this.dataList.clear();
-            this.dataList.addAll(dataList);
+    public void setDataList(ArrayList<People> dataList) {
+        if (dataList!=null) {
+            if(adapterDataList == null){
+                adapterDataList = new ArrayList<>();
+            }
+            adapterDataList.clear();
+            adapterDataList.addAll(dataList);
             notifyDataSetChanged();
         }
     }

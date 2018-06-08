@@ -2,12 +2,11 @@ package com.mrzhangcustom_master.activity;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
 import com.mrzhangcustom_library.activity.ExitActivityUtil;
 import com.mrzhangcustom_master.R;
 import com.mrzhangcustom_master.adapter.MainRecycleViewAdapter;
@@ -51,25 +50,54 @@ public class MainActivity extends ExitActivityUtil {
         firstLoad();
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
+            public void onRefresh(final RefreshLayout refreshlayout) {
+                new Thread(){
+                    @Override
+                    public void run() {
+                        page = 1;
+                        newDataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
+                        if(newDataList!=null&&newDataList.size()>0){
+                            dataList.clear();
+                            dataList.addAll(newDataList);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainRecycleViewAdapter.setDataList(dataList);
+                                }
+                            });
+                            page++;
+                            refreshlayout.finishRefresh(true);
+                        }else{
+                            refreshlayout.finishRefresh(1000);
+                        }
+                    }
+                }.start();
+//                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+            }
+        });
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(final RefreshLayout refreshlayout) {
                 new Thread(){
                     @Override
                     public void run() {
                         newDataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
                         if(newDataList!=null&&newDataList.size()>0){
                             dataList.addAll(newDataList);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainRecycleViewAdapter.setDataList(dataList);
+                                }
+                            });
+                            page++;
+                            refreshlayout.finishLoadMore(true);
+                        }else{
+                            refreshlayout.finishLoadMore(1000);
                         }
-                        mainRecycleViewAdapter.setDataList(dataList);
-                        page++;
                     }
                 }.start();
-                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-            }
-        });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+//                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
             }
         });
     }
@@ -77,7 +105,12 @@ public class MainActivity extends ExitActivityUtil {
     private void initView() {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         refreshLayout = (RefreshLayout)findViewById(R.id.refreshLayout);
+//设置 Header 为 贝塞尔雷达 样式
+//        refreshLayout.setRefreshHeader(new ClassicsHeader(this).setLastUpdateTime(new Date(System.currentTimeMillis())).setAccentColor(Color.RED));
+////设置 Footer 为 球脉冲 样式
+//        refreshLayout.setRefreshFooter(new ClassicsFooter(this).setSpinnerStyle(SpinnerStyle.Scale).setAccentColor(Color.RED));
         mainRecycleViewAdapter = new MainRecycleViewAdapter(recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mainRecycleViewAdapter);
     }
 
@@ -88,7 +121,12 @@ public class MainActivity extends ExitActivityUtil {
             @Override
             public void run() {
                 dataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
-                mainRecycleViewAdapter.setDataList(dataList);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                            mainRecycleViewAdapter.setDataList(dataList);
+                    }
+                });
                 page++;
             }
         }.start();
