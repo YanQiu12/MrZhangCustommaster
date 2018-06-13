@@ -39,7 +39,8 @@ public abstract class BaseProtocol<T> {
     }
 
     private String getDataFromNet(String url,int index){
-        String s = IOUtil.toString(url + index + ".json");
+        String s = IOUtil.toString("http://120.76.205.241:8000/news/qihoo?kw=社会&site=qq.com&pageToken="
+                +index+"&apikey=z8BHWuMCoDKzfpgkCBCkncsg4kQXEkIMc4yuPn10QcJVZT48wTtgeroVT9K25EGO");
         writeToLocal(s,index);
         return s;
 //        try {

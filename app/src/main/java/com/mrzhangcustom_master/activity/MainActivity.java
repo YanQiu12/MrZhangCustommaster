@@ -1,43 +1,26 @@
 package com.mrzhangcustom_master.activity;
 
-import android.os.Handler;
-import android.os.Message;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.TextView;
 import com.mrzhangcustom_library.activity.ExitActivityUtil;
 import com.mrzhangcustom_master.R;
 import com.mrzhangcustom_master.adapter.MainRecycleViewAdapter;
-import com.mrzhangcustom_master.bean.People;
+import com.mrzhangcustom_master.bean.News;
 import com.mrzhangcustom_master.protocol.TestProtocol;
 import com.mrzhangcustom_master.util.Constant;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ExitActivityUtil {
 
-    Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(msg.what==1){
-                tvData.setText((String)msg.obj);
-            }
-        }
-    };
-
-    private TestProtocol testProtocol;
-    private String data;
-    private TextView tvData;
     private RecyclerView recyclerView;
     private RefreshLayout refreshLayout;
     private TestProtocol testProtocol1;
-    private ArrayList<People> dataList;
-    private ArrayList<People> newDataList;
+    private List<News.DataBean> dataList;
+    private List<News.DataBean> newDataList;
     private MainRecycleViewAdapter mainRecycleViewAdapter;
     private int page;
 
@@ -45,7 +28,6 @@ public class MainActivity extends ExitActivityUtil {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tvData = findViewById(R.id.tv_data);
         initView();
         firstLoad();
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -55,7 +37,7 @@ public class MainActivity extends ExitActivityUtil {
                     @Override
                     public void run() {
                         page = 1;
-                        newDataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
+                        newDataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page).getData();
                         if(newDataList!=null&&newDataList.size()>0){
                             dataList.clear();
                             dataList.addAll(newDataList);
@@ -81,7 +63,7 @@ public class MainActivity extends ExitActivityUtil {
                 new Thread(){
                     @Override
                     public void run() {
-                        newDataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
+                        newDataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page).getData();
                         if(newDataList!=null&&newDataList.size()>0){
                             dataList.addAll(newDataList);
                             runOnUiThread(new Runnable() {
@@ -120,7 +102,7 @@ public class MainActivity extends ExitActivityUtil {
         new Thread(){
             @Override
             public void run() {
-                dataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
+                dataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page).getData();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -130,28 +112,5 @@ public class MainActivity extends ExitActivityUtil {
                 page++;
             }
         }.start();
-    }
-
-    public void btn1(View view) {
-//        if(testProtocol == null){
-//            testProtocol = new TestProtocol(this);
-//        }
-//        new Thread(){
-//            @Override
-//            public void run() {
-//                for (int i = 1; i < 6; i++) {
-//                    data = (String)testProtocol.getData(Constant.BASE_URL+Constant.JSON_URL, i);
-//                    try {
-//                        sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    Message message = Message.obtain();
-//                    message.obj = data;
-//                    message.what = 1;
-//                    mHandler.sendMessage(message);
-//                }
-//            }
-//        }.start();
     }
 }
