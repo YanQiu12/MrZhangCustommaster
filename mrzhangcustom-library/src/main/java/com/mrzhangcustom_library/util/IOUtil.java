@@ -75,9 +75,10 @@ public class IOUtil {
             return response.body().string();
         }catch(IOException e){
             e.printStackTrace();
-            Log.e(IOUtil.class.getName(),"URL获取String异常。");
+            System.out.println(IOUtil.class.getName()+"URL获取String异常。");
+            return  null;
+//            Log.e(IOUtil.class.getName(),"URL获取String异常。");
         }
-        return null;
     }
     //从File里读取String
     public static String toString(File file){

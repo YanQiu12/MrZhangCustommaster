@@ -1,0 +1,13 @@
+<?pxml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="px50">750px</dimen>
+    <dimen name="px2">3px</dimen>
+    <dimen name="px3">4.5px</dimen>
+    <dimen name="px4">6px</dimen>
+    ......
+    <dimen name="px1397">2095.5px</dimen>
+    <dimen name="px1398">2097px</dimen>
+    <dimen name="px1399">2098.5px</dimen>
+    <dimen name="px1400">2100px</dimen>
+
+</resources>

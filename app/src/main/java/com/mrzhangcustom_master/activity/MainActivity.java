@@ -102,14 +102,17 @@ public class MainActivity extends ExitActivityUtil {
         new Thread(){
             @Override
             public void run() {
-                dataList = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page).getData();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                News news = testProtocol1.getData(Constant.BASE_URL + Constant.JSON_URL, page);
+                if(news!=null){
+                    dataList = news.getData();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             mainRecycleViewAdapter.setDataList(dataList);
-                    }
-                });
-                page++;
+                        }
+                    });
+                    page++;
+                }
             }
         }.start();
     }

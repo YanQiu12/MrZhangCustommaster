@@ -2,6 +2,7 @@ package com.mrzhangcustom_master.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mrzhangcustom_library.util.ScreenUtil;
+import com.mrzhangcustom_library.util.StringUtil;
 import com.mrzhangcustom_master.R;
+import com.mrzhangcustom_master.activity.ImageActivity;
 import com.mrzhangcustom_master.bean.News;
 
 import java.lang.reflect.Array;
@@ -26,6 +30,11 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     Context mContext;
     List<News.DataBean> adapterDataList;
+    private static final int ID_RELATIVELAYOUT = 122;
+    private static final int ID_IMAGELINNEAR_LAYOUT1 = 123;
+    private static final int ID_IMAGELINNEAR_LAYOUT2 = 124;
+    private static final int ID_TV_NEW_POSTERSCREENNAME = 125;
+    private static final int ID_TV_NEW_DATA_TIME = 126;
 
     public MainRecycleViewAdapter(RecyclerView recyclerView) {
         this.mContext = recyclerView.getContext();
@@ -52,32 +61,47 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         //创建title的TextView
         TextView tv_title = new TextView(mContext);
         tv_title.setText("AAAAA");
-        tv_title.setTextSize(ScreenUtil.dip2px(18f,mContext));
+        tv_title.setTextSize(16);
         tv_title.setTextColor(Color.parseColor("#000000"));
         LinearLayout.LayoutParams tv1_lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1_lp.setMargins(0,ScreenUtil.dip2px(7f,mContext),0,0);
+        tv1_lp.setMargins(0,7,0,0);
         linearLayout.addView(tv_title,tv1_lp);
+
+        //给图片创建一个预留的线性布局
+        LinearLayout imageLinearLayout1 = new LinearLayout(mContext);
+        imageLinearLayout1.setId(ID_IMAGELINNEAR_LAYOUT1);
+        imageLinearLayout1.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams lpImageLinearLayout1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayout.addView(imageLinearLayout1,lpImageLinearLayout1);
+        //给图片再创建一个预留的线性布局
+        LinearLayout imageLinearLayout2 = new LinearLayout(mContext);
+        imageLinearLayout2.setId(ID_IMAGELINNEAR_LAYOUT2);
+        imageLinearLayout2.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout.LayoutParams lpImageLinearLayout2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayout.addView(imageLinearLayout2,lpImageLinearLayout2);
 
         //创建子layout为相对布局
         RelativeLayout relativeLayout = new RelativeLayout(mContext);
+        relativeLayout.setId(ID_RELATIVELAYOUT);
         LinearLayout.LayoutParams re_lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        re_lp.setMargins(0,ScreenUtil.dip2px(3f,mContext),0,0);
+        re_lp.setMargins(0,3,0,0);
         //创建子layout的第一个TextView，即新闻提供者TextView
         TextView tv_new_posterScreenName = new TextView(mContext);
         tv_new_posterScreenName.setText("腾讯");
-        tv_new_posterScreenName.setId(123);
+        tv_new_posterScreenName.setId(ID_TV_NEW_POSTERSCREENNAME);
         tv_new_posterScreenName.setTextColor(Color.parseColor("#666666"));
-        tv_new_posterScreenName.setTextSize(ScreenUtil.dip2px(10f,mContext));
+        tv_new_posterScreenName.setTextSize(10);
         RelativeLayout.LayoutParams tv2_lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         relativeLayout.addView(tv_new_posterScreenName,tv2_lp);
         //创建子layout的第二个TextView，即新闻日期时间TextView
         TextView tv_new_data_time = new TextView(mContext);
         tv_new_data_time.setText("2014-01-24 15:09");
+        tv_new_data_time.setId(ID_TV_NEW_DATA_TIME);
         tv_new_data_time.setTextColor(Color.parseColor("#666666"));
-        tv_new_data_time.setTextSize(ScreenUtil.dip2px(12f,mContext));
+        tv_new_data_time.setTextSize(12);
         RelativeLayout.LayoutParams tv3_lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         tv3_lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        tv3_lp.setMargins(0,0,ScreenUtil.dip2px(20f,mContext),0);
+        tv3_lp.setMargins(0,0,20,0);
         relativeLayout.addView(tv_new_data_time,tv3_lp);
         //将子布局relativeLayout添加到主布局linearLayout中
         linearLayout.addView(relativeLayout,re_lp);
@@ -93,22 +117,94 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
     }
 
     @Override
-    public void onBindViewHolder(RecyclerHolder holder, int position) {
-        holder.tvTitle.setText(adapterDataList.get(position).getTitle());
+    public void onBindViewHolder(RecyclerHolder holder, final int position) {
+        holder.tvTitle.setText(adapterDataList.get(position).getTitle().replaceAll("&quot;","\""));
         holder.tvNeWPosterScreenName.setText(adapterDataList.get(position).getPosterScreenName());
         String strData = adapterDataList.get(position).getPublishDateStr().replace("T", "  ");
         holder.tvNewDataTime.setText(strData);
+        LinearLayout imageLinearLayout1 = holder.imageLinearLayout1;
+        LinearLayout imageLinearLayout2 = holder.imageLinearLayout2;
+        imageLinearLayout1.removeAllViews();
+        imageLinearLayout2.removeAllViews();
         if(adapterDataList.get(position).getImageUrls()!=null){
-            RelativeLayout relativeLayout = (RelativeLayout)((ViewGroup) holder.itemView).getChildAt(1);
-            ImageView tv_image_url = new ImageView(mContext);
-            Glide.with(mContext).load(adapterDataList.get(position).getImageUrls().get(0)).into(tv_image_url);
-//            tv_image_url.setText("AAAAA");
-//            tv_image_url.setTextSize(ScreenUtil.dip2px(18f,mContext));
-//            tv_image_url.setTextColor(Color.parseColor("#000000"));
-            RelativeLayout.LayoutParams tv4_lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            if(adapterDataList.get(position).getImageUrls().size()>4){
+                for (int i = 0; i < 4; i++) {
+                    ImageView tv_image_url = new ImageView(mContext);
+                    final int finalI = i;
+                    tv_image_url.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext, ImageActivity.class);
+                            intent.putExtra("imageUrl",adapterDataList.get(position).getImageUrls().get(finalI));
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    Glide
+                            .with(mContext)
+                            .load(adapterDataList.get(position).getImageUrls().get(i))
+                            .placeholder(R.drawable.imageload)
+                            .into(tv_image_url);
+                    int a = ScreenUtil.px2dip(mContext.getResources().getDimension(R.dimen.px50), mContext);
+                    RelativeLayout.LayoutParams tv4_lp = new RelativeLayout.LayoutParams(a, a);
 //            tv4_lp.setMargins(0,ScreenUtil.dip2px(7f,mContext),0,0);
-            tv4_lp.addRule(RelativeLayout.BELOW, 123);
-            relativeLayout.addView(tv_image_url,tv4_lp);
+                    tv4_lp.addRule(RelativeLayout.BELOW, ID_TV_NEW_POSTERSCREENNAME);
+                    if (i != 0) {
+                        tv4_lp.setMargins(2, 0, 0, 0);
+                    }
+                    imageLinearLayout1.addView(tv_image_url, tv4_lp);
+                }
+                for (int i = 4; i < adapterDataList.get(position).getImageUrls().size(); i++) {
+                    ImageView tv_image_url = new ImageView(mContext);
+                    final int finalI = i;
+                    tv_image_url.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext, ImageActivity.class);
+                            intent.putExtra("imageUrl",adapterDataList.get(position).getImageUrls().get(finalI));
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    Glide
+                            .with(mContext)
+                            .load(adapterDataList.get(position).getImageUrls().get(i))
+                            .placeholder(R.drawable.imageload)
+                            .into(tv_image_url);
+                    int a = ScreenUtil.px2dip(mContext.getResources().getDimension(R.dimen.px50), mContext);
+                    RelativeLayout.LayoutParams tv4_lp = new RelativeLayout.LayoutParams(a, a);
+//            tv4_lp.setMargins(0,ScreenUtil.dip2px(7f,mContext),0,0);
+                    tv4_lp.addRule(RelativeLayout.BELOW, ID_TV_NEW_POSTERSCREENNAME);
+                    if (i != 4) {
+                        tv4_lp.setMargins(2, 0, 0, 0);
+                    }
+                    imageLinearLayout2.addView(tv_image_url, tv4_lp);
+                }
+            }else{
+                for (int i = 0; i < adapterDataList.get(position).getImageUrls().size(); i++) {
+                    ImageView tv_image_url = new ImageView(mContext);
+                    final int finalI = i;
+                    tv_image_url.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(mContext, ImageActivity.class);
+                            intent.putExtra("imageUrl",adapterDataList.get(position).getImageUrls().get(finalI));
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    Glide
+                            .with(mContext)
+                            .load(adapterDataList.get(position).getImageUrls().get(i))
+                            .placeholder(R.drawable.imageload)
+                            .into(tv_image_url);
+                    int a = ScreenUtil.px2dip(mContext.getResources().getDimension(R.dimen.px50), mContext);
+                    RelativeLayout.LayoutParams tv4_lp = new RelativeLayout.LayoutParams(a, a);
+//            tv4_lp.setMargins(0,ScreenUtil.dip2px(7f,mContext),0,0);
+                    tv4_lp.addRule(RelativeLayout.BELOW, ID_TV_NEW_POSTERSCREENNAME);
+                    if (i != 0) {
+                        tv4_lp.setMargins(2, 0, 0, 0);
+                    }
+                    imageLinearLayout1.addView(tv_image_url, tv4_lp);
+                }
+            }
         }
     }
 
@@ -124,13 +220,21 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         TextView tvTitle;
         TextView tvNeWPosterScreenName;
         TextView tvNewDataTime;
+        LinearLayout imageLinearLayout1;
+        LinearLayout imageLinearLayout2;
 
         private RecyclerHolder(View itemView) {
             super(itemView);
+
             tvTitle = (TextView)((ViewGroup) itemView).getChildAt(0);
-            RelativeLayout relativeLayout = (RelativeLayout)((ViewGroup) itemView).getChildAt(1);
-            tvNeWPosterScreenName = (TextView)relativeLayout.getChildAt(0);
-            tvNewDataTime = (TextView)relativeLayout.getChildAt(1);
+            imageLinearLayout1 = itemView.findViewById(ID_IMAGELINNEAR_LAYOUT1);
+            imageLinearLayout2 = itemView.findViewById(ID_IMAGELINNEAR_LAYOUT2);
+//            RelativeLayout relativeLayout = (RelativeLayout)((ViewGroup) itemView).getChildAt(ID_RELATIVELAYOUT);
+//            tvNeWPosterScreenName = (TextView)relativeLayout.getChildAt(ID_TV_NEW_POSTERSCREENNAME);
+//            tvNewDataTime = (TextView)relativeLayout.getChildAt(ID_TV_NEW_DATA_TIME);
+//            RelativeLayout relativeLayout = (RelativeLayout)itemView.findViewById(ID_RELATIVELAYOUT);
+            tvNeWPosterScreenName = itemView.findViewById(ID_TV_NEW_POSTERSCREENNAME);
+            tvNewDataTime = itemView.findViewById(ID_TV_NEW_DATA_TIME);
         }
     }
 
