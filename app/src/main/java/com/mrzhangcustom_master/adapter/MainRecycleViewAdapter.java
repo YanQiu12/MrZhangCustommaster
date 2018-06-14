@@ -1,34 +1,30 @@
 package com.mrzhangcustom_master.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mrzhangcustom_library.util.ScreenUtil;
-import com.mrzhangcustom_library.util.StringUtil;
 import com.mrzhangcustom_master.R;
 import com.mrzhangcustom_master.activity.ImageActivity;
 import com.mrzhangcustom_master.bean.News;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleViewAdapter.RecyclerHolder> {
 
     Context mContext;
+    private long[] mHits;
     List<News.DataBean> adapterDataList;
     private static final int ID_RELATIVELAYOUT = 122;
     private static final int ID_IMAGELINNEAR_LAYOUT1 = 123;
@@ -38,15 +34,6 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     public MainRecycleViewAdapter(RecyclerView recyclerView) {
         this.mContext = recyclerView.getContext();
-//        long[] mHits = new long[7];
-//        //每点击一次 实现左移一格数据
-//        System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
-//        //给数组的最后赋当前时钟值
-//        mHits[mHits.length - 1] = SystemClock.uptimeMillis();
-//        //当0出的值大于当前时间-5时  证明在5秒内点击了7次
-//        if (mHits[0] > SystemClock.uptimeMillis() - 5000) {
-//
-//        }
     }
 
     @Override
@@ -64,27 +51,27 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         tv_title.setTextSize(16);
         tv_title.setTextColor(Color.parseColor("#000000"));
         LinearLayout.LayoutParams tv1_lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        tv1_lp.setMargins(0,7,0,0);
-        linearLayout.addView(tv_title,tv1_lp);
+        tv1_lp.setMargins(0, 7, 0, 0);
+        linearLayout.addView(tv_title, tv1_lp);
 
         //给图片创建一个预留的线性布局
         LinearLayout imageLinearLayout1 = new LinearLayout(mContext);
         imageLinearLayout1.setId(ID_IMAGELINNEAR_LAYOUT1);
         imageLinearLayout1.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams lpImageLinearLayout1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayout.addView(imageLinearLayout1,lpImageLinearLayout1);
+        linearLayout.addView(imageLinearLayout1, lpImageLinearLayout1);
         //给图片再创建一个预留的线性布局
         LinearLayout imageLinearLayout2 = new LinearLayout(mContext);
         imageLinearLayout2.setId(ID_IMAGELINNEAR_LAYOUT2);
         imageLinearLayout2.setOrientation(LinearLayout.HORIZONTAL);
         LinearLayout.LayoutParams lpImageLinearLayout2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayout.addView(imageLinearLayout2,lpImageLinearLayout2);
+        linearLayout.addView(imageLinearLayout2, lpImageLinearLayout2);
 
         //创建子layout为相对布局
         RelativeLayout relativeLayout = new RelativeLayout(mContext);
         relativeLayout.setId(ID_RELATIVELAYOUT);
         LinearLayout.LayoutParams re_lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        re_lp.setMargins(0,3,0,0);
+        re_lp.setMargins(0, 3, 0, 0);
         //创建子layout的第一个TextView，即新闻提供者TextView
         TextView tv_new_posterScreenName = new TextView(mContext);
         tv_new_posterScreenName.setText("腾讯");
@@ -92,7 +79,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         tv_new_posterScreenName.setTextColor(Color.parseColor("#666666"));
         tv_new_posterScreenName.setTextSize(10);
         RelativeLayout.LayoutParams tv2_lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        relativeLayout.addView(tv_new_posterScreenName,tv2_lp);
+        relativeLayout.addView(tv_new_posterScreenName, tv2_lp);
         //创建子layout的第二个TextView，即新闻日期时间TextView
         TextView tv_new_data_time = new TextView(mContext);
         tv_new_data_time.setText("2014-01-24 15:09");
@@ -101,24 +88,24 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         tv_new_data_time.setTextSize(12);
         RelativeLayout.LayoutParams tv3_lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         tv3_lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        tv3_lp.setMargins(0,0,20,0);
-        relativeLayout.addView(tv_new_data_time,tv3_lp);
+        tv3_lp.setMargins(0, 0, 20, 0);
+        relativeLayout.addView(tv_new_data_time, tv3_lp);
         //将子布局relativeLayout添加到主布局linearLayout中
-        linearLayout.addView(relativeLayout,re_lp);
+        linearLayout.addView(relativeLayout, re_lp);
 
         //创建分割线，实际上是一个1px高度的LinearLayout
         LinearLayout linearLayout1 = new LinearLayout(mContext);
         LinearLayout.LayoutParams ll_lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        ll_lp1.setMargins(0,3,0,0);
+        ll_lp1.setMargins(0, 3, 0, 0);
         linearLayout1.setBackgroundColor(Color.parseColor("#666666"));
-        linearLayout.addView(linearLayout1,ll_lp1);
+        linearLayout.addView(linearLayout1, ll_lp1);
 
         return new RecyclerHolder(linearLayout);
     }
 
     @Override
     public void onBindViewHolder(RecyclerHolder holder, final int position) {
-        holder.tvTitle.setText(adapterDataList.get(position).getTitle().replaceAll("&quot;","\""));
+        holder.tvTitle.setText(adapterDataList.get(position).getTitle().replaceAll("&quot;", "\""));
         holder.tvNeWPosterScreenName.setText(adapterDataList.get(position).getPosterScreenName());
         String strData = adapterDataList.get(position).getPublishDateStr().replace("T", "  ");
         holder.tvNewDataTime.setText(strData);
@@ -126,17 +113,25 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         LinearLayout imageLinearLayout2 = holder.imageLinearLayout2;
         imageLinearLayout1.removeAllViews();
         imageLinearLayout2.removeAllViews();
-        if(adapterDataList.get(position).getImageUrls()!=null){
-            if(adapterDataList.get(position).getImageUrls().size()>4){
+        if (adapterDataList.get(position).getImageUrls() != null) {
+            if (adapterDataList.get(position).getImageUrls().size() > 4) {
                 for (int i = 0; i < 4; i++) {
                     ImageView tv_image_url = new ImageView(mContext);
                     final int finalI = i;
+                    mHits = new long[3];
                     tv_image_url.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(mContext, ImageActivity.class);
-                            intent.putExtra("imageUrl",adapterDataList.get(position).getImageUrls().get(finalI));
-                            mContext.startActivity(intent);
+                            //每点击一次 实现左移一格数据
+                            System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                            //给数组的最后赋当前时钟值
+                            mHits[mHits.length - 1] = SystemClock.uptimeMillis();
+                            //当0出的值大于当前时间-5时  证明在5秒内点击了7次
+                            if (mHits[0] > SystemClock.uptimeMillis() - 1000) {
+                                Intent intent = new Intent(mContext, ImageActivity.class);
+                                intent.putExtra("imageUrl", adapterDataList.get(position).getImageUrls().get(finalI));
+                                mContext.startActivity(intent);
+                            }
                         }
                     });
                     Glide
@@ -160,7 +155,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(mContext, ImageActivity.class);
-                            intent.putExtra("imageUrl",adapterDataList.get(position).getImageUrls().get(finalI));
+                            intent.putExtra("imageUrl", adapterDataList.get(position).getImageUrls().get(finalI));
                             mContext.startActivity(intent);
                         }
                     });
@@ -178,7 +173,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
                     }
                     imageLinearLayout2.addView(tv_image_url, tv4_lp);
                 }
-            }else{
+            } else {
                 for (int i = 0; i < adapterDataList.get(position).getImageUrls().size(); i++) {
                     ImageView tv_image_url = new ImageView(mContext);
                     final int finalI = i;
@@ -186,7 +181,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(mContext, ImageActivity.class);
-                            intent.putExtra("imageUrl",adapterDataList.get(position).getImageUrls().get(finalI));
+                            intent.putExtra("imageUrl", adapterDataList.get(position).getImageUrls().get(finalI));
                             mContext.startActivity(intent);
                         }
                     });
@@ -210,7 +205,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
 
     @Override
     public int getItemCount() {
-        if(adapterDataList!=null){
+        if (adapterDataList != null) {
             return adapterDataList.size();
         }
         return 0;
@@ -226,7 +221,7 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
         private RecyclerHolder(View itemView) {
             super(itemView);
 
-            tvTitle = (TextView)((ViewGroup) itemView).getChildAt(0);
+            tvTitle = (TextView) ((ViewGroup) itemView).getChildAt(0);
             imageLinearLayout1 = itemView.findViewById(ID_IMAGELINNEAR_LAYOUT1);
             imageLinearLayout2 = itemView.findViewById(ID_IMAGELINNEAR_LAYOUT2);
 //            RelativeLayout relativeLayout = (RelativeLayout)((ViewGroup) itemView).getChildAt(ID_RELATIVELAYOUT);
@@ -239,8 +234,8 @@ public class MainRecycleViewAdapter extends RecyclerView.Adapter<MainRecycleView
     }
 
     public void setDataList(List<News.DataBean> dataList) {
-        if (dataList!=null) {
-            if(adapterDataList == null){
+        if (dataList != null) {
+            if (adapterDataList == null) {
                 adapterDataList = new ArrayList<>();
             }
             adapterDataList.clear();
